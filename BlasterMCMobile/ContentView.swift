@@ -11,10 +11,10 @@ struct ContentView: View {
     var body: some View {
         Group {
             if showingIntro {
-                StudioSplash()
+                AtlasSplash()
                     .transition(.opacity)
             } else if !session.isSignedIn {
-                StudioLoginView()
+                AtlasLoginView()
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
                 mainTabs
@@ -22,6 +22,7 @@ struct ContentView: View {
             }
         }
         .environmentObject(session)
+        .preferredColorScheme(.light)
         .animation(.easeInOut(duration: 0.38), value: showingIntro)
         .animation(.easeInOut(duration: 0.30), value: session.isSignedIn)
         .task {
@@ -51,6 +52,6 @@ struct ContentView: View {
     }
 
     private var mainTabs: some View {
-        ForgeShell(server: server)
+        AtlasShell(server: server)
     }
 }

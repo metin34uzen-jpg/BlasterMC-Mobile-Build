@@ -59,7 +59,7 @@ struct StudioPanel<Content:View>:View {
     var padding:CGFloat=17
     @ViewBuilder let content:Content
     var body:some View {
-        content
+        VStack(alignment:.leading,spacing:12) { content }
             .frame(maxWidth:.infinity,alignment:.leading)
             .padding(padding)
             .background(
