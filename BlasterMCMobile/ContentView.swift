@@ -12,10 +12,10 @@ struct ContentView: View {
     var body: some View {
         Group {
             if showingIntro {
-                IntroScreen()
+                ForgeArrivalSplash()
                     .transition(.opacity)
             } else if !session.isSignedIn {
-                LoginPortal()
+                ForgeLoginPortal()
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
                 mainTabs
@@ -60,25 +60,6 @@ struct ContentView: View {
     }
 
     private var mainTabs: some View {
-        TabView(selection: $tab) {
-            V10HomeView(server: server, navigate: { tab = $0 }, isSelected: tab == 0)
-                .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
-                .tag(0)
-            V10WorldView(server: server)
-                .tabItem { Label("Dünya", systemImage: "globe.europe.africa.fill") }
-                .tag(1)
-            V10StoreView()
-                .tabItem { Label("Mağaza", systemImage: "bag.fill") }
-                .tag(2)
-            SeasonView()
-                .tabItem { Label("Sezon", systemImage: "trophy.fill") }
-                .tag(3)
-            ProfileView()
-                .tabItem { Label("Profil", systemImage: "person.crop.square.fill") }
-                .tag(4)
-        }
-        .tint(BlasterTheme.gold)
-        .toolbarBackground(BlasterTheme.paper, for: .tabBar)
-        .toolbarBackground(.visible, for: .tabBar)
+        ForgeShell(server: server)
     }
 }
