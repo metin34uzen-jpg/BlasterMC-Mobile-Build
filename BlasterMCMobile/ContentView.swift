@@ -5,17 +5,16 @@ struct ContentView: View {
     @StateObject private var session = BlasterSession()
     @StateObject private var server = ServerStatusModel()
     @StateObject private var push = PushCoordinator.shared
-    @State private var tab = 0
     @State private var showingIntro = true
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Group {
             if showingIntro {
-                ForgeArrivalSplash()
+                StudioSplash()
                     .transition(.opacity)
             } else if !session.isSignedIn {
-                ForgeLoginPortal()
+                StudioLoginView()
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
                 mainTabs
@@ -35,14 +34,6 @@ struct ContentView: View {
             await push.requestOnLaunch()
             await account.value
             if let token = push.deviceToken { await session.registerPushToken(token) }
-        }
-        .sheet(isPresented: $push.showSettingsPrompt) {
-            NotificationSettingsPrompt(push: push)
-        }
-        .onChange(of: session.isSignedIn) { oldValue, newValue in
-            if !oldValue && newValue {
-                Task { await push.checkAfterLogin() }
-            }
         }
         .onChange(of: push.deviceToken) { _, token in
             guard let token else { return }

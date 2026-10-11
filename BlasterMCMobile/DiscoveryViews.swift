@@ -448,7 +448,6 @@ struct SeasonView: View {
 
 struct NewsView: View {
     @EnvironmentObject private var session: BlasterSession
-    @StateObject private var push = PushCoordinator.shared
     @State private var selectedFeed = 0
     @State private var search = ""
     @State private var savedOnly = false
@@ -489,7 +488,6 @@ struct NewsView: View {
                         subtitle: "Güncel haberler, sezon duyuruları ve topluluk etkinlikleri.",
                         symbol: "bell.badge.fill"
                     )
-                    notificationStatus
                     HStack {
                         SectionHeader(title: "BlasterMC gündemi", caption: "Sunucudan gelen doğrulanmış içerikler")
                         Spacer()
@@ -538,7 +536,6 @@ struct NewsView: View {
             .navigationTitle("Blaster Haberler")
             .navigationBarTitleDisplayMode(.inline)
             .refreshable { await session.reloadPublic() }
-            .task { await push.refreshPermissionStatus() }
         }
     }
 
@@ -561,46 +558,7 @@ struct NewsView: View {
         }
     }
 
-    private var notificationStatus: some View {
-        BlasterCard {
-            VStack(alignment: .leading, spacing: 13) {
-                HStack(spacing: 11) {
-                    Image(systemName: "bell.circle.fill")
-                        .font(.system(size: 28))
-                        .foregroundStyle(BlasterTheme.gold)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Bildirim Merkezi")
-                            .font(.headline)
-                        Text("İzin ve teslimat durumlarını ayrı takip et")
-                            .font(.caption)
-                            .foregroundStyle(BlasterTheme.muted)
-                    }
-                }
-                Divider()
-                statusLine("iPhone bildirim izni",
-                           value: push.permissionDescription,
-                           symbol: push.permissionGranted ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                statusLine("Uzaktan APNs",
-                           value: push.deviceToken == nil ? "Push yetkisi / cihaz kaydı bulunamadı" : "Cihaz kayıt belirteci alındı",
-                           symbol: "antenna.radiowaves.left.and.right")
-                Text("Bildirim izni açık olsa da ücretsiz AltStore imzası uzaktan APNs özelliğini sağlamayabilir. Yerel bildirimler ayrı çalışır.")
-                    .font(.caption2)
-                    .foregroundStyle(BlasterTheme.muted)
-            }
-        }
-    }
 
-    private func statusLine(_ title: String, value: String, symbol: String) -> some View {
-        HStack(spacing: 11) {
-            Image(systemName: symbol)
-                .foregroundStyle(BlasterTheme.gold)
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title).font(.subheadline.weight(.semibold))
-                Text(value).font(.caption).foregroundStyle(BlasterTheme.muted)
-            }
-            Spacer()
-        }
-    }
 }
 
 private struct NewsItemCard: View {
