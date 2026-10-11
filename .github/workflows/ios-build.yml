@@ -1,8 +1,14 @@
 name: iOS Build
-# Manual-only while the GitHub Actions monthly quota is exhausted.
-# Avoid starting two macOS jobs after every small code change.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'BlasterMCMobile/**'
+      - 'branding/**'
+      - 'scripts/**'
+      - 'project.yml'
+      - '.github/workflows/ios-build.yml'
 
 concurrency:
   group: ios-manual-build
@@ -13,6 +19,7 @@ jobs:
     # Private mirrors never consume paid/minuted Actions; run on public only.
     if: ${{ github.event.repository.private == false }}
     runs-on: macos-15
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v5
