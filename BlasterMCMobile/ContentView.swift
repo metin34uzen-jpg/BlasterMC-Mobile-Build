@@ -61,22 +61,24 @@ struct ContentView: View {
 
     private var mainTabs: some View {
         TabView(selection: $tab) {
-            HomeView(server: server, navigate: { tab = $0 }, isSelected: tab == 0)
+            V10HomeView(server: server, navigate: { tab = $0 }, isSelected: tab == 0)
                 .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
                 .tag(0)
-            ProfileView()
-                .tabItem { Label("Profil", systemImage: "person.crop.square") }
+            V10WorldView(server: server)
+                .tabItem { Label("Dünya", systemImage: "globe.europe.africa.fill") }
                 .tag(1)
-            StoreView()
+            V10StoreView()
                 .tabItem { Label("Mağaza", systemImage: "bag.fill") }
                 .tag(2)
             SeasonView()
                 .tabItem { Label("Sezon", systemImage: "trophy.fill") }
                 .tag(3)
-            NewsView()
-                .tabItem { Label("Haberler", systemImage: "bell.fill") }
+            ProfileView()
+                .tabItem { Label("Profil", systemImage: "person.crop.square.fill") }
                 .tag(4)
         }
         .tint(BlasterTheme.gold)
+        .toolbarBackground(BlasterTheme.paper, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
     }
 }
