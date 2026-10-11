@@ -1,25 +1,10 @@
-# BLASTERMC MOBILE — WORLD EXPERIENCE v10.0
+# BlasterMC Mobile 10.3 — Okunabilirlik ve Mağaza Güncellemesi
 
-## Yenilikler
-- Beş sekme: Ana Sayfa / Dünya / Mağaza / Sezon / Profil.
-- Gold-Navy sinematik ana sayfa, SkyWorld sahnesi, gerçek oyuncu ve sunucu durumu.
-- Dünya Atlası: SkyBlock, Lobi, Topluluk; komut kopyalama ve resmî bağlantılar.
-- Kişisel keşif rotası ve Profil Pasaportu (yalnızca bu iPhone).
-- Mağaza: gerçek katalog araması, filtreleme, fiyat sıralama, favoriler, iki ürün karşılaştırması.
-- Sezon sıralamasında oyuncu ve ada araması.
-- Haber araması ve cihazda kaydetme.
-- Yönetim merkezi, yerel bildirimler, 2FA, Keychain ve 15 dakikalık oturum korunur.
+- Ana sayfa: Sabit yüksekliğe sıkışan ve katman altında kaybolabilen yazılar kaldırıldı. Metinler doğal yükseklikte ve yüksek kontrastlı yüzeylerde.
+- Yeni ana ekran: Canlı sunucu, bağımsız IP kopyalama, gerçek oyuncu kimliği, kredi cüzdanı, kısayollar ve haberler.
+- Mağaza: API'den gelen gerçek ürün görselleriyle öne çıkan ürün vitrini, daha büyük görsel/fiyat alanları, kategori, arama, sıralama, favori, karşılaştırma.
+- Sezon: Sıralama ödülleri 1. ₺5.000, 2. ₺1.500, 3. ₺1.000; toplam ₺7.500. Nakit ödüller API ödül listesi boşken de gösterilir.
+- Kazanan/ödeme durumu için gerçekte bulunmayan veri oluşturulmaz.
+- Giriş, 2FA, Keychain, bildirim, yönetici rol ayrımı ve profil çıkışı korunur.
 
-## Gerçekçilik ve güvenlik
-- Keşif adımları ve favoriler yalnızca cihazdadır; oyun ödülü veya hesap senkronizasyonu değildir.
-- Minecraft komutları uygulamadan sunucuya çalıştırılmaz, panoya kopyalanır.
-- Mobil satın alma veya ödül teslimatı için doğrulanmış sunucu işlemi olmadan satın alma yapılmaz.
-- APNs uzaktan bildirimler ücretsiz AltStore ile garanti edilmez; yerel bildirimler ayrı çalışır.
-- Oyuncu, kredi, sezon, haber ve sunucu verileri canlı API kaynaklarından gelir; veri üretilmez.
-- Yeni iPhone IPA derlemesi başarıyla tamamlanmadan v10 henüz derlenmiş sayılmaz.
-
-## Teknik
-- iOS 17+ SwiftUI
-- Sürüm: 10.0.0 (100)
-- Bundle ID: com.blastermc.mobile
-- Orijinal ana depo Private; build mirror izinsiz Public yapılmayacak.
+Sürüm: 10.3.0 (103). Görsel uygunluk ancak cihaz testinden sonra doğrulanabilir.

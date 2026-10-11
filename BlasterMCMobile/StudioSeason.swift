@@ -30,6 +30,7 @@ struct StudioSeasonView:View {
                             .lineLimit(2)
                     }
                 }
+                cashAwards
                 standings
                 HStack(spacing:8) {
                     tab("Liderlik tablosu",number:0)
@@ -78,9 +79,71 @@ struct StudioSeasonView:View {
         .buttonStyle(BlasterTapStyle())
     }
 
+
+    // Announced monetary prizes are public season information, not user earnings or payouts.
+    private var cashAwards: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            StudioSection(kicker: "AÇIKLANAN SEZON ÖDÜLLERİ",
+                          title: "₺7.500 nakit ödül",
+                          accessory: "İlk 3 ada")
+            cashPrize(position: 1, amount: "₺5.000", title: "BİRİNCİLİK",
+                      caption: "Sezonun 1. sırasına", primary: true)
+            HStack(spacing: 10) {
+                cashPrize(position: 2, amount: "₺1.500", title: "İKİNCİLİK",
+                          caption: "Sezonun 2. sırasına", primary: false)
+                cashPrize(position: 3, amount: "₺1.000", title: "ÜÇÜNCÜLÜK",
+                          caption: "Sezonun 3. sırasına", primary: false)
+            }
+            Text("Tutarlar açıklanan sıralama ödülleridir. Kazananlar ve ödeme durumu sezon sonuçlarına göre belirlenir.")
+                .font(.system(size: 11))
+                .foregroundStyle(Studio.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func cashPrize(position: Int, amount: String, title: String,
+                           caption: String, primary: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: position == 1 ? "crown.fill" : "medal.fill")
+                    .font(.system(size: primary ? 20 : 16))
+                    .foregroundStyle(primary ? Studio.sunlight : Studio.gold)
+                Text("#\(position)")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(primary ? Studio.sunlight : Studio.secondary)
+                Spacer()
+                if primary {
+                    Text("BÜYÜK ÖDÜL")
+                        .font(.system(size: 9, weight: .black))
+                        .tracking(0.8)
+                        .foregroundStyle(Studio.sunlight)
+                }
+            }
+            Text(amount)
+                .font(.system(size: primary ? 31 : 24, weight: .black, design: .rounded))
+                .foregroundStyle(primary ? Color.white : Studio.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.82)
+            Text(title)
+                .font(.system(size: 10, weight: .bold))
+                .tracking(0.65)
+                .foregroundStyle(primary ? Color.white : Studio.gold)
+            Text(caption)
+                .font(.system(size: 11))
+                .foregroundStyle(primary ? Color.white.opacity(0.80) : Studio.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(primary ? 20 : 16)
+        .background(primary ? Studio.navy : Studio.paper,
+                    in: RoundedRectangle(cornerRadius: 19))
+        .overlay(RoundedRectangle(cornerRadius: 19)
+                    .strokeBorder(primary ? Studio.sunlight.opacity(0.32) : Studio.line))
+    }
+
     private var standings:some View {
         VStack(alignment:.leading,spacing:11) {
-            StudioSection(kicker:"CANLI / SIRALAMA",title:"İlk üç ada")
+            StudioSection(kicker:"CANLI / SIRALAMA",title:"Şu anki ilk üç ada")
             if let leaders=session.season?.rankings,!leaders.isEmpty {
                 ForEach(Array(leaders.prefix(3))) { rank in
                     rankingRow(rank,podium:true)
@@ -160,7 +223,7 @@ struct StudioSeasonView:View {
 
     private var rewards:some View {
         VStack(alignment:.leading,spacing:10) {
-            StudioSection(kicker:"RESMÎ / ÖDÜLLER",title:"Sezon kazanımları")
+            StudioSection(kicker:"EK / ÖDÜL BİLGİLERİ",title:"Diğer sezon ödülleri")
             if let entries=session.season?.rewards,!entries.isEmpty {
                 ForEach(entries) { entry in
                     StudioPanel {
@@ -188,8 +251,8 @@ struct StudioSeasonView:View {
                     }
                 }
             } else {
-                StudioEmpty(title:"Ödüller açıklanmadı",
-                            detail:"Sunucuda yayımlanmayan bir ödülü göstermiyoruz.",
+                StudioEmpty(title:"Ek ödül duyurusu yok",
+                            detail:"Yukarıdaki ₺5.000, ₺1.500 ve ₺1.000 nakit ödülleri geçerlidir. Ek ödüller açıklanırsa burada görünür.",
                             symbol:"gift")
             }
         }
