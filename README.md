@@ -1,13 +1,21 @@
-# BlasterMC Mobile — public iOS build mirror
+# BlasterMC Mobile — World Experience v10.0
 
-This repository contains **only** the iOS SwiftUI client and the files needed to produce an unsigned iPhone IPA for development with AltStore. The private working repository remains separate.
+Bu depo, iOS istemcisinin **yalnızca derleme amaçlı** aynasıdır. Ana geliştirmenin yapıldığı BlasterMC-Mobile deposu ayrı ve özeldir.
 
-- App: BlasterMC Mobile v3.5
-- Bundle ID: `com.blastermc.mobile`
-- iOS: 17+
-- GitHub Actions: select **iOS Build** → **Run workflow**, or push a change to relevant build files.
-- After a successful run, download the **BlasterMCMobile-unsigned-IPA** artifact, unzip it, and install the contained `BlasterMCMobile-unsigned.ipa` with AltStore.
+- Uygulama: BlasterMC Mobile v10.0.0 (build 100)
+- iOS: 17+ / SwiftUI
+- Bundle ID: com.blastermc.mobile
+- GitHub Actions: **iOS Build** iş akışı → **Run workflow**.
+- Başarılı derlemede **BlasterMCMobile-unsigned-IPA** adlı ZIP çıktısını indir, içindeki unsigned IPA'yı AltStore ile kur.
 
-This repo does **not** contain the private PHP API implementation, website code, database, signing certificates, or server secrets. **Anything committed here is publicly visible, including Git history.** Keep all credentials in private storage; don't add them to iOS sources or workflow logs.
+## Özellikler
 
-The IPA is unsigned; this workflow does not distribute a signed App Store build.
+Yeni Dünya Merkezi, canlı sunucu durumu, oyuncu ve kredi verileri, sezon sıralaması/arama, ürün filtreleme/favoriler/karşılaştırma, yerel kişisel keşif rotası, haber araması/kaydetme ve mevcut bildirim/yönetim/güvenlik akışları.
+
+## Gizlilik
+
+Bu repo Private tutulduğunda kodlar herkese açık değildir; ancak GitHub Actions ücretsiz Public depo avantajından yararlanılamaz. Kaynakları derlemek için Public yapılırsa dosyalar ve commit geçmişi herkes tarafından görülebilir. Repo tekrar Private yapılsa bile önceden indirilen kopyalar geri alınamaz.
+
+Bu depoda özel PHP API, veritabanı veya sunucu kimlik bilgisi yoktur. Yeni bir anahtar ya da sertifika asla bu aynaya yüklenmemelidir. Ödeme ve APNs uzaktan bildirim özellikleri, sunucu ve Apple tarafında yetkili yapılandırma gerektirir.
+
+Ayrıntılar için V10_RELEASE.md dosyasına bak.
