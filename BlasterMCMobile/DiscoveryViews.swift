@@ -174,6 +174,7 @@ private struct StoreProductCard: View {
 struct SeasonView: View {
     @EnvironmentObject private var session: BlasterSession
     @State private var ambient = false
+    @State private var rankingSearch = ""
 
     var body: some View {
         NavigationStack {
@@ -270,12 +271,37 @@ struct SeasonView: View {
         VStack(alignment: .leading, spacing: 13) {
             SectionHeader(title: "Zirve mücadelesi", caption: "Gerçek ada değerleri ve oyuncu sıralaması")
             if let rankings = session.season?.rankings, !rankings.isEmpty {
-                ForEach(rankings.prefix(3)) { rank in
-                    rankRow(rank, isPodium: true)
+                HStack(spacing: 10) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(V10.gold)
+                    TextField("Oyuncu veya ada ara", text: $rankingSearch)
+                        .font(.subheadline)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    if !rankingSearch.isEmpty {
+                        Button {
+                            rankingSearch = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(BlasterTheme.muted)
+                        }
+                    }
                 }
-                if rankings.count > 3 {
-                    ForEach(Array(rankings.dropFirst(3))) { rank in
-                        rankRow(rank, isPodium: false)
+                .padding(14)
+                .background(BlasterTheme.paper, in: RoundedRectangle(cornerRadius: 15))
+                .overlay(RoundedRectangle(cornerRadius: 15).strokeBorder(V10.line))
+                let matching = rankings.filter {
+                    rankingSearch.isEmpty ||
+                    $0.ownerUsername.localizedStandardContains(rankingSearch) ||
+                    $0.islandName.localizedStandardContains(rankingSearch)
+                }
+                if matching.isEmpty {
+                    NoticePlaceholder(symbol: "magnifyingglass",
+                                      title: "Oyuncu bulunamadı",
+                                      message: "Başka bir oyuncu veya ada adı ara.")
+                } else {
+                    ForEach(matching) { rank in
+                        rankRow(rank, isPodium: rank.rankPosition <= 3)
                     }
                 }
                 if let updated = session.season?.updatedAt {
@@ -424,15 +450,33 @@ struct NewsView: View {
     @EnvironmentObject private var session: BlasterSession
     @StateObject private var push = PushCoordinator.shared
     @State private var selectedFeed = 0
+    @State private var search = ""
+    @State private var savedOnly = false
+    @AppStorage("blaster.v10.news.saved") private var savedIDs = ""
+
+    private var saved: Set<Int> {
+        Set(savedIDs.split(separator: ",").compactMap { Int($0) })
+    }
 
     private var items: [MobileNotice] {
-        let announcements = session.announcements
-        let events = session.events
+        let base: [MobileNotice]
         switch selectedFeed {
-        case 1: return announcements
-        case 2: return events
-        default: return (announcements + events).sorted { $0.createdAt > $1.createdAt }
+        case 1: base = session.announcements
+        case 2: base = session.events
+        default: base = session.announcements + session.events
         }
+        return base.filter {
+            (!savedOnly || saved.contains($0.id)) &&
+            (search.isEmpty || $0.title.localizedStandardContains(search) ||
+             $0.body.localizedStandardContains(search))
+        }.sorted { $0.createdAt > $1.createdAt }
+    }
+
+    private func toggleSaved(_ id: Int) {
+        var ids = saved
+        if ids.contains(id) { ids.remove(id) } else { ids.insert(id) }
+        savedIDs = ids.sorted().map(String.init).joined(separator: ",")
+        V10.tap()
     }
 
     var body: some View {
@@ -454,6 +498,22 @@ struct NewsView: View {
                             .foregroundStyle(BlasterTheme.gold)
                     }
                     feedPicker
+                    HStack(spacing: 10) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(V10.gold)
+                        TextField("Haberlerde ara", text: $search)
+                            .font(.subheadline)
+                        Button {
+                            savedOnly.toggle()
+                        } label: {
+                            Label("Kaydettiklerim", systemImage: savedOnly ? "bookmark.fill" : "bookmark")
+                                .font(.caption2.weight(.heavy))
+                                .foregroundStyle(V10.gold)
+                        }
+                    }
+                    .padding(14)
+                    .background(BlasterTheme.paper, in: RoundedRectangle(cornerRadius: 15))
+                    .overlay(RoundedRectangle(cornerRadius: 15).strokeBorder(V10.line))
                     if items.isEmpty {
                         NoticePlaceholder(
                             symbol: "newspaper.fill",
@@ -462,7 +522,9 @@ struct NewsView: View {
                         )
                     } else {
                         ForEach(items) { notice in
-                            NewsItemCard(notice: notice)
+                            NewsItemCard(notice: notice, isSaved: saved.contains(notice.id)) {
+                                toggleSaved(notice.id)
+                            }
                         }
                     }
                     GoldButton(title: "DUYURULARI YENİLE", symbol: "arrow.clockwise") {
@@ -543,6 +605,8 @@ struct NewsView: View {
 
 private struct NewsItemCard: View {
     let notice: MobileNotice
+    let isSaved: Bool
+    let onToggleSave: () -> Void
 
     var body: some View {
         BlasterCard {
@@ -556,6 +620,11 @@ private struct NewsItemCard: View {
                         .tracking(1.6)
                         .foregroundStyle(BlasterTheme.gold)
                     Spacer()
+                    Button(action: onToggleSave) {
+                        Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                            .foregroundStyle(BlasterTheme.gold)
+                    }
+                    .accessibilityLabel(isSaved ? "Kaydedilenlerden kaldır" : "Haberi kaydet")
                     Text(notice.createdAt, style: .date)
                         .font(.caption2)
                         .foregroundStyle(BlasterTheme.muted)

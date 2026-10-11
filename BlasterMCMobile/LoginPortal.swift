@@ -32,7 +32,7 @@ struct IntroScreen: View {
                     .font(.system(size: 33, weight: .black, design: .rounded))
                     .tracking(4)
                     .foregroundStyle(BlasterTheme.cream)
-                Text("DÜNYANA HOŞ GELDİN")
+                Text("WORLD EXPERIENCE  /  V10")
                     .font(.system(size: 11, weight: .bold))
                     .tracking(3)
                     .foregroundStyle(BlasterTheme.amber)
@@ -108,7 +108,7 @@ struct LoginPortal: View {
                 Text("BLASTERMC")
                     .font(.system(size: 20, weight: .black, design: .rounded))
                     .tracking(1.7)
-                Text("MOBILE EXPERIENCE")
+                Text("WORLD EXPERIENCE 10")
                     .font(.system(size: 10, weight: .bold))
                     .tracking(2)
                     .foregroundStyle(BlasterTheme.gold)
@@ -122,8 +122,8 @@ struct LoginPortal: View {
     private var welcome: some View {
         PremiumBanner(
             eyebrow: "✦  GÜVENLİ OYUNCU PORTALI",
-            title: "Macera seninle\nbaşlıyor.",
-            subtitle: "SkyBlock dünyan, rütben ve Blaster kredilerin artık yanında.",
+            title: "Yeni bir evrene\ngiriş yap.",
+            subtitle: "Dünya merkezine, gerçek oyuncu verilerine ve sezon arenasına tek kapıdan ulaş.",
             symbol: "gamecontroller.fill"
         )
     }

@@ -174,7 +174,7 @@ struct AdminCenterView: View {
                         .font(.system(size: 10, weight: .heavy))
                         .tracking(1.6)
                         .foregroundStyle(BlasterTheme.amber)
-                    Text("BLASTER CONTROL")
+                    Text("BLASTER CONTROL / V10")
                         .font(.system(size: 22, weight: .black, design: .rounded))
                         .tracking(-0.6)
                         .foregroundStyle(.white)

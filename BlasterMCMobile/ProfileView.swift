@@ -2,6 +2,10 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject private var session: BlasterSession
+    @State private var copiedBlasterID = false
+    @AppStorage("blaster.v10.journey.address") private var copiedAddress = false
+    @AppStorage("blaster.v10.journey.world") private var visitedWorld = false
+    @AppStorage("blaster.v10.journey.season") private var visitedSeason = false
 
     var body: some View {
         NavigationStack {
@@ -10,6 +14,7 @@ struct ProfileView: View {
                     playerHero
                     SectionHeader(title: "Oyuncu kimliğin", caption: "BlasterMC evrenindeki resmî profilin")
                     playerOverview
+                    explorerPassport
                     if session.isAdministrator { adminEntry }
                     wallet
                     activity
@@ -48,7 +53,7 @@ struct ProfileView: View {
             HStack(alignment: .center, spacing: 15) {
                 avatar(size: 98)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("BLASTERMC / PLAYER")
+                    Text("BLASTERMC / PLAYER PASSPORT 10")
                         .font(.system(size: 10, weight: .heavy))
                         .tracking(2)
                         .foregroundStyle(BlasterTheme.amber)
@@ -102,9 +107,23 @@ struct ProfileView: View {
                         .tracking(1)
                         .foregroundStyle(BlasterTheme.gold)
                     Spacer()
-                    Text(session.profile?.blasterId ?? "—")
-                        .font(.subheadline.monospaced().bold())
+                    Button {
+                        guard let id = session.profile?.blasterId, !id.isEmpty else { return }
+                        V10.copy(id)
+                        copiedBlasterID = true
+                    } label: {
+                        HStack(spacing: 5) {
+                            Text(session.profile?.blasterId ?? "—")
+                                .font(.subheadline.monospaced().bold())
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.72)
+                            Image(systemName: copiedBlasterID ? "checkmark" : "doc.on.doc")
+                                .font(.caption)
+                        }
                         .foregroundStyle(BlasterTheme.ink)
+                    }
+                    .buttonStyle(BlasterTapStyle())
+                    .accessibilityLabel("Blaster ID kopyala")
                 }
                 Divider().overlay(BlasterTheme.gold.opacity(0.15))
                 HStack {
@@ -120,6 +139,42 @@ struct ProfileView: View {
         }
     }
 
+
+    private var explorerPassport: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            V10Heading(eyebrow: "PASSPORT / DEVICE",
+                       title: "Keşif pasaportun",
+                       detail: "Bu cihazdaki keşif adımların • Oyun içi başarı veya ödül değildir")
+            V10Plate {
+                HStack {
+                    Image(systemName: "seal.fill")
+                        .font(.system(size: 31))
+                        .foregroundStyle(V10.gold)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("DÜNYA KAŞİFİ")
+                            .font(.system(size: 12, weight: .black))
+                            .tracking(1.2)
+                            .foregroundStyle(V10.ink)
+                        Text("\([copiedAddress, visitedWorld, visitedSeason].filter { $0 }.count) / 3 keşif adımı")
+                            .font(.caption)
+                            .foregroundStyle(BlasterTheme.muted)
+                    }
+                    Spacer()
+                    BlasterLogo(size: 48)
+                }
+                V10ProgressBar(progress:
+                    Double([copiedAddress, visitedWorld, visitedSeason].filter { $0 }.count) / 3)
+                HStack(spacing: 8) {
+                    V10Tag(text: copiedAddress ? "IP hazır" : "IP keşfedilmedi",
+                           symbol: copiedAddress ? "checkmark.circle.fill" : "doc")
+                    V10Tag(text: visitedWorld ? "Dünya gezildi" : "Dünya bekliyor",
+                           symbol: visitedWorld ? "checkmark.circle.fill" : "globe")
+                }
+                .minimumScaleFactor(0.75)
+            }
+        }
+    }
+
     private var adminEntry: some View {
         NavigationLink {
             AdminCenterView()
@@ -131,7 +186,7 @@ struct ProfileView: View {
                     .frame(width: 55, height: 55)
                     .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 16))
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("BLASTER CONTROL")
+                    Text("BLASTER CONTROL / V10")
                         .font(.headline.weight(.black))
                         .tracking(1)
                         .foregroundStyle(.white)
