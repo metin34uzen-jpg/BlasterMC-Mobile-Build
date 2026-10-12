@@ -17,7 +17,7 @@ struct AtlasSplash: View {
                     .font(.system(size: 29, weight: .black, design: .rounded))
                     .tracking(2.1)
                     .foregroundStyle(.white)
-                Text("MOBILE  /  ATLAS 11")
+                Text("MOBILE  /  AURORA 12")
                     .font(.system(size: 10, weight: .heavy, design: .monospaced))
                     .tracking(2)
                     .foregroundStyle(Atlas.orange)
@@ -43,13 +43,13 @@ struct AtlasLoginView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
-                AtlasMasthead(label: "Güvenli oyuncu girişi")
+                AtlasMasthead(label: "Güvenli giriş / AURORA")
                 AtlasBanner(eyebrow: "BLASTERMC  /  PLAYER ACCESS") {
-                    Text("Dünyana\nyeniden hoş geldin.")
+                    Text("Yeni bir dünya.\nTek bir hesap.")
                         .font(.system(size: 30, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("Minecraft hesabınla giriş yap ve BlasterMC evrenine bağlan.")
+                    Text("SkyBlock, sezon, mağaza ve topluluğun tek bir girişte.")
                         .font(.system(size: 13))
                         .foregroundStyle(.white.opacity(0.89))
                         .fixedSize(horizontal: false, vertical: true)

@@ -40,7 +40,7 @@ struct AtlasMarketView: View {
 
     var body: some View {
         AtlasScreen {
-            AtlasMasthead(label: "Market / Koleksiyon")
+            AtlasMasthead(label: "Blaster Market / AURORA")
             showcase
             balance
             controls
@@ -54,12 +54,12 @@ struct AtlasMarketView: View {
 
     private var showcase: some View {
         AtlasBanner(eyebrow: "BLASTER MARKET  /  SEÇKİ") {
-            Text("Oyuncu\nkoleksiyonu.")
+            Text("Seçimini yap.\nFarkını göster.")
                 .font(.system(size: 31, weight: .black, design: .rounded))
                 .tracking(-0.8)
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Rütbeler, kasalar ve oyun içi içerikler.")
+            Text("BlasterMC koleksiyonu: rütbeler, kasalar ve oyun içi ayrıcalıklar.")
                 .font(.system(size: 13))
                 .foregroundStyle(.white.opacity(0.89))
                 .fixedSize(horizontal: false, vertical: true)
@@ -132,7 +132,7 @@ struct AtlasMarketView: View {
 
     private var controls: some View {
         VStack(alignment: .leading, spacing: 12) {
-            AtlasHeading(kicker: "KATALOĞU KEŞFET", title: "Sana uygun olanı bul")
+            AtlasHeading(kicker: "KATALOĞU KEŞFET", title: "Tarzını bul", detail: "Gerçek ürünleri filtrele, kaydet ve karşılaştır.")
             HStack(spacing: 10) {
                 Image(systemName: "magnifyingglass").foregroundStyle(Atlas.copper)
                 TextField("Ürün, VIP veya kasa ara", text: $search)

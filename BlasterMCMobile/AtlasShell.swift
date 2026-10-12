@@ -1,5 +1,7 @@
 import SwiftUI
 
+/// AURORA navigation: one focused screen, a tactile floating dock, and a
+/// bottom safe-area boundary that never hides the profile logout action.
 struct AtlasShell: View {
     @ObservedObject var server: ServerStatusModel
     @State private var selected = 0
@@ -17,9 +19,10 @@ struct AtlasShell: View {
                 }
             }
             .id(selected)
+            .transition(.opacity)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            bottomBar
+            dock
         }
         .preferredColorScheme(.light)
     }
@@ -27,24 +30,30 @@ struct AtlasShell: View {
     private func navigate(_ index: Int) {
         guard selected != index else { return }
         Atlas.haptic()
-        selected = index
+        withAnimation(.easeInOut(duration: 0.18)) { selected = index }
     }
 
-    private var bottomBar: some View {
-        VStack(spacing: 0) {
-            Rectangle().fill(Atlas.line).frame(height: 1)
-            HStack(spacing: 0) {
-                tab(0, title: "Ana Sayfa", icon: "house")
-                tab(1, title: "Dünya", icon: "globe.europe.africa")
-                tab(2, title: "Mağaza", icon: "bag")
-                tab(3, title: "Sezon", icon: "trophy")
-                tab(4, title: "Profil", icon: "person.crop.circle")
-            }
-            .padding(.horizontal, 6)
-            .padding(.top, 8)
-            .padding(.bottom, 5)
+    private var dock: some View {
+        HStack(spacing: 2) {
+            tab(0, title: "Ana Sayfa", icon: "house.fill")
+            tab(1, title: "Dünya", icon: "square.stack.3d.up.fill")
+            tab(2, title: "Mağaza", icon: "bag.fill")
+            tab(3, title: "Sezon", icon: "trophy.fill")
+            tab(4, title: "Profil", icon: "person.crop.circle.fill")
         }
-        .background(Atlas.paper.ignoresSafeArea(edges: .bottom))
+        .padding(.horizontal, 7)
+        .padding(.vertical, 7)
+        .background(Atlas.paper, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(Atlas.line, lineWidth: 1))
+        .shadow(color: Atlas.navy.opacity(0.12), radius: 20, x: 0, y: 7)
+        .padding(.horizontal, 12)
+        .padding(.top, 6)
+        .padding(.bottom, 3)
+        .background(
+            LinearGradient(colors: [Atlas.canvas.opacity(0.0), Atlas.canvas.opacity(0.97)],
+                           startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea(edges: .bottom)
+        )
     }
 
     private func tab(_ index: Int, title: String, icon: String) -> some View {
@@ -52,21 +61,20 @@ struct AtlasShell: View {
         return Button {
             navigate(index)
         } label: {
-            VStack(spacing: 5) {
+            VStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.system(size: 19, weight: active ? .bold : .regular))
-                    .foregroundStyle(active ? Atlas.copper : Atlas.muted)
-                    .frame(height: 25)
+                    .font(.system(size: 18, weight: active ? .bold : .medium))
+                    .frame(height: 23)
                 Text(title)
-                    .font(.system(size: 10, weight: active ? .heavy : .medium))
-                    .foregroundStyle(active ? Atlas.ink : Atlas.muted)
+                    .font(.system(size: 9.5, weight: active ? .heavy : .semibold, design: .rounded))
                     .lineLimit(1)
-                    .minimumScaleFactor(0.76)
-                Capsule()
-                    .fill(active ? Atlas.copper : Color.clear)
-                    .frame(width: 19, height: 3)
+                    .minimumScaleFactor(0.75)
             }
-            .frame(maxWidth: .infinity, minHeight: 53)
+            .foregroundStyle(active ? Color.white : Atlas.muted)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(active ? Atlas.blue : Color.clear,
+                        in: RoundedRectangle(cornerRadius: 17, style: .continuous))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

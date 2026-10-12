@@ -7,16 +7,18 @@ struct AtlasHomeView: View {
     let active: Bool
     @Environment(\.scenePhase) private var phase
     @State private var newsOpen = false
+    @State private var toolsOpen = false
     @State private var copied = false
 
     var body: some View {
         AtlasScreen {
-            AtlasMasthead(label: "Oyuncu kontrol noktası", trailingSymbol: "bell.badge") {
+            AtlasMasthead(label: "Oyuncu merkezi / AURORA", trailingSymbol: "bell.badge") {
                 newsOpen = true
             }
             greeting
             liveNetwork
             actionDeck
+            toolbox
             seasonTeaser
             account
             latestNews
@@ -25,6 +27,9 @@ struct AtlasHomeView: View {
         .sheet(isPresented: $newsOpen) {
             AtlasNewsView()
                 .environmentObject(session)
+        }
+        .sheet(isPresented: $toolsOpen) {
+            AtlasQuickPanel()
         }
         .task(id: active && phase == .active) {
             guard active && phase == .active else { return }
@@ -42,14 +47,14 @@ struct AtlasHomeView: View {
     }
 
     private var greeting: some View {
-        AtlasBanner(eyebrow: "BLASTERMC  /  ANA ÜS") {
-            Text("Dünyanın\nmerkezindesin.")
+        AtlasBanner(eyebrow: "BLASTERMC / YENİ NESİL DENEYİM") {
+            Text("Bir sonraki\nmacera burada.")
                 .font(.system(size: 34, weight: .black, design: .rounded))
                 .tracking(-1.2)
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
-            Text("SkyBlock maceran, hesabın ve topluluğun burada buluşuyor.")
+            Text("Hoş geldin, \(session.profile?.minecraftName ?? "Oyuncu"). SkyBlock, sezon ve topluluğun tek bir yerde.")
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(Color.white.opacity(0.91))
                 .lineSpacing(3)
@@ -59,7 +64,7 @@ struct AtlasHomeView: View {
                 select(1)
             } label: {
                 HStack(spacing: 9) {
-                    Text("OYUN DÜNYASINI AÇ")
+                    Text("MACERAYA BAŞLA")
                         .font(.system(size: 12, weight: .heavy))
                         .tracking(0.3)
                     Image(systemName: "arrow.up.right")
@@ -144,7 +149,7 @@ struct AtlasHomeView: View {
 
     private var actionDeck: some View {
         VStack(alignment: .leading, spacing: 12) {
-            AtlasHeading(kicker: "02 / KEŞFET", title: "Sana özel yollar")
+            AtlasHeading(kicker: "02 / KEŞFET", title: "Blaster evrenini keşfet", detail: "İhtiyacın olan her şey bir dokunuş uzağında.")
             HStack(alignment: .top, spacing: 10) {
                 tile("Dünya", detail: "SkyBlock ve komutlar",
                      symbol: "square.stack.3d.up.fill", index: 1)
@@ -193,6 +198,36 @@ struct AtlasHomeView: View {
         .padding(15)
         .background(Atlas.paper, in: RoundedRectangle(cornerRadius: 17))
         .overlay(RoundedRectangle(cornerRadius: 17).strokeBorder(Atlas.line))
+    }
+
+    private var toolbox: some View {
+        Button {
+            toolsOpen = true
+        } label: {
+            HStack(spacing: 13) {
+                Image(systemName: "square.grid.3x3.topleft.filled")
+                    .font(.system(size: 20))
+                    .foregroundStyle(Atlas.blue)
+                    .frame(width: 47, height: 47)
+                    .background(Atlas.blueLight, in: RoundedRectangle(cornerRadius: 14))
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Hızlı erişim merkezi")
+                        .font(.system(size: 15, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Atlas.ink)
+                    Text("Komutlar, sunucu IP'si ve bağlantılar")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Atlas.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Image(systemName: "arrow.up.right")
+                    .foregroundStyle(Atlas.blue)
+            }
+            .padding(15)
+            .background(Atlas.paper, in: RoundedRectangle(cornerRadius: 18))
+            .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Atlas.line))
+        }
+        .buttonStyle(.plain)
     }
 
     private var seasonTeaser: some View {
