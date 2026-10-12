@@ -67,7 +67,8 @@ struct AtlasQuickPanel: View {
                                detail: "Farklı bir komut adıyla yeniden ara.",
                                symbol: "magnifyingglass")
                 } else {
-                    ForEach(visible, id: \.0) { command in
+                    ForEach(visible.indices, id: \.self) { index in
+                        let command = visible[index]
                         Button {
                             Atlas.copy(command.0)
                             copied = command.0
