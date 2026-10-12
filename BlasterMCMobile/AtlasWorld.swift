@@ -4,12 +4,13 @@ struct AtlasWorldView: View {
     @ObservedObject var server: ServerStatusModel
     @State private var tab = 0
     @State private var copied = ""
+    @State private var toolsOpen = false
 
     var body: some View {
         AtlasScreen {
-            AtlasMasthead(label: "Dünya / SkyBlock")
+            AtlasMasthead(label: "SkyBlock rehberi / AURORA")
             AtlasBanner(eyebrow: "BLASTERMC  /  OYUN EVRENİ") {
-                Text("Bir blokla\nbaşlayan hikâye.")
+                Text("Kendi dünyanı\ninşa et.")
                     .font(.system(size: 31, weight: .black, design: .rounded))
                     .tracking(-0.8)
                     .foregroundStyle(.white)
@@ -24,12 +25,16 @@ struct AtlasWorldView: View {
             tabs
             guide
             shortcuts
+            AtlasAction(title: "Hızlı erişim merkezini aç", symbol: "square.grid.3x3") {
+                toolsOpen = true
+            }
             AtlasAction(title: "Sunucu durumunu yenile",
                         symbol: "arrow.clockwise", secondary: true) {
                 Task { await server.refresh() }
             }
         }
         .refreshable { await server.refresh() }
+        .sheet(isPresented: $toolsOpen) { AtlasQuickPanel() }
     }
 
     private var address: some View {

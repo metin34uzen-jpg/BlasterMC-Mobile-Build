@@ -28,13 +28,13 @@ struct AtlasNewsView: View {
     var body: some View {
         NavigationStack {
             AtlasScreen {
-                AtlasMasthead(label: "Topluluk / Haberler")
+                AtlasMasthead(label: "Topluluk gündemi / AURORA")
                 AtlasBanner(eyebrow: "BLASTER HABERLER") {
-                    Text("Dünyadan\nhaberin olsun.")
+                    Text("Her gelişme\nburada.")
                         .font(.system(size: 30, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("Duyurular, etkinlikler ve BlasterMC'den son gelişmeler.")
+                    Text("Yeni etkinlikler, güncellemeler ve BlasterMC duyuruları.")
                         .font(.system(size: 13))
                         .foregroundStyle(.white.opacity(0.90))
                         .fixedSize(horizontal: false, vertical: true)

@@ -9,7 +9,8 @@ struct AtlasProfileView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 AtlasScreen {
-                    AtlasMasthead(label: "Blaster ID / Profil")
+                    AtlasMasthead(label: "Blaster ID / AURORA")
+                    profileWelcome
                     identity
                     wallet
                     presence
@@ -17,6 +18,7 @@ struct AtlasProfileView: View {
                         administrator
                     }
                     security
+                    appInfo
                     links
                 }
                 .frame(maxHeight: .infinity)
@@ -34,6 +36,40 @@ struct AtlasProfileView: View {
                 Button("Vazgeç", role: .cancel) {}
             } message: {
                 Text("Bu cihazdaki oturum anahtarı silinecek ve oturum sonlandırılacak.")
+            }
+        }
+    }
+
+    private var profileWelcome: some View {
+        AtlasBanner(eyebrow: "BLASTER ID / OYUNCU MERKEZİ") {
+            Text("Senin hesabın.\nSenin dünyan.")
+                .font(.system(size: 29, weight: .black, design: .rounded))
+                .foregroundStyle(.white)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Hoş geldin, \(session.profile?.minecraftName ?? "Oyuncu").")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.white.opacity(0.91))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var appInfo: some View {
+        AtlasCard {
+            HStack(spacing: 11) {
+                Image(systemName: "app.badge.checkmark")
+                    .font(.system(size: 19))
+                    .foregroundStyle(Atlas.blue)
+                    .frame(width: 30)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("BlasterMC Mobile")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Atlas.ink)
+                    Text("AURORA 12 · Oyuncu deneyimi")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Atlas.muted)
+                }
+                Spacer(minLength: 0)
+                AtlasPixelSignature()
             }
         }
     }

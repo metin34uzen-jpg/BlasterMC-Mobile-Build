@@ -14,7 +14,7 @@ struct AtlasSeasonView: View {
 
     var body: some View {
         AtlasScreen {
-            AtlasMasthead(label: "SkyBlock / Sezon")
+            AtlasMasthead(label: "Sezon merkezi / AURORA")
             introduction
             awards
             selection
@@ -40,7 +40,7 @@ struct AtlasSeasonView: View {
 
     private var introduction: some View {
         AtlasBanner(eyebrow: "BLASTERMC  /  SEZON ARENASI") {
-            Text("Adanı yükselt.\nZirveyi kazan.")
+            Text("Zirve senin\nolsun.")
                 .font(.system(size: 31, weight: .black, design: .rounded))
                 .tracking(-0.8)
                 .foregroundStyle(.white)
@@ -63,7 +63,7 @@ struct AtlasSeasonView: View {
     private var awards: some View {
         VStack(alignment: .leading, spacing: 12) {
             AtlasHeading(kicker: "AÇIKLANAN NAKİT ÖDÜLLER",
-                         title: "Ödül kürsüsü",
+                         title: "Şampiyonlar kürsüsü",
                          detail: "Sezon sonunda sıralamadaki ilk üç ada")
             prize(rank: 1, amount: "₺5.000", name: "BİRİNCİLİK ÖDÜLÜ", top: true)
             HStack(alignment: .top, spacing: 10) {

@@ -32,11 +32,11 @@ struct AtlasAdminView: View {
     private var authorized: some View {
         AtlasScreen {
             AtlasBanner(eyebrow: "BLASTER CONTROL / YÖNETİCİ") {
-                Text("Sistemlerin\nkontrolü sende.")
+                Text("Kontrol\nmerkezi.")
                     .font(.system(size: 29, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("Minecraft, web, Discord ve bildirim altyapısı.")
+                Text("Servislerin, bildirimlerin ve BlasterMC operasyonlarının tek merkezi.")
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.89))
                     .fixedSize(horizontal: false, vertical: true)
