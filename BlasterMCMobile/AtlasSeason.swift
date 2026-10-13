@@ -208,7 +208,7 @@ struct AtlasSeasonView: View {
                     Capsule().fill(Atlas.line)
                         .overlay(alignment: .leading) {
                             Capsule().fill(item.rankPosition == 1 ? Atlas.orange : Atlas.blue)
-                                .frame(width: geo.size.width * min(1, max(0.08,
+                                .frame(width: geo.size.width * CGFloat(min(1.0, max(0.08,
                                     Double(item.islandValue) / Double(max(1, (session.season?.rankings ?? []).map(\.islandValue).max() ?? 1)))))
                         }
                 }
