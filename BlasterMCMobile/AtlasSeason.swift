@@ -14,7 +14,7 @@ struct AtlasSeasonView: View {
 
     var body: some View {
         AtlasScreen {
-            AtlasMasthead(label: "Sezon merkezi / AURORA")
+            AtlasMasthead(label: "Sezon arenası / REALM")
             introduction
             awards
             selection
@@ -39,39 +39,57 @@ struct AtlasSeasonView: View {
     }
 
     private var introduction: some View {
-        AtlasBanner(eyebrow: "BLASTERMC  /  SEZON ARENASI") {
-            Text("Zirve senin\nolsun.")
-                .font(.system(size: 31, weight: .black, design: .rounded))
-                .tracking(-0.8)
-                .foregroundStyle(.white)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(session.season?.title ?? "SkyBlock ada sıralaması")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.91))
-                .fixedSize(horizontal: false, vertical: true)
-            HStack(spacing: 9) {
-                Image(systemName: "trophy.fill")
-                    .foregroundStyle(Atlas.orange)
-                Text("TOPLAM ₺7.500 NAKİT ÖDÜL")
-                    .font(.system(size: 12, weight: .heavy))
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(LinearGradient(colors: [Atlas.navy, Atlas.deepBlue],
+                                     startPoint: .topLeading, endPoint: .bottomTrailing))
+            RealmPortalArt()
+                .frame(width: 128, height: 142)
+                .opacity(0.5)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.trailing, 8)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 11) {
+                AtlasPill(title: "SEZON / SKYBLOCK", symbol: "sparkles", highlighted: true)
+                Text(session.season?.title ?? "Ada şampiyonası")
+                    .font(.system(size: 24, weight: .black, design: .rounded))
+                    .tracking(-0.65)
                     .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(session.season?.subtitle ?? "Kur, geliştir ve sıralamada zirveye oyna.")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 6) {
+                    Image(systemName: "banknote.fill").foregroundStyle(Atlas.orange)
+                    Text("₺7.500 TOPLAM ÖDÜL")
+                        .font(.system(size: 10, weight: .black, design: .monospaced))
+                        .foregroundStyle(Atlas.orange)
+                }
             }
-            .padding(.top, 2)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(18)
+            .padding(.trailing, 95)
         }
+        .fixedSize(horizontal: false, vertical: true)
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(Atlas.aqua.opacity(0.16)))
     }
 
     private var awards: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            AtlasHeading(kicker: "AÇIKLANAN NAKİT ÖDÜLLER",
-                         title: "Şampiyonlar kürsüsü",
-                         detail: "Sezon sonunda sıralamadaki ilk üç ada")
-            prize(rank: 1, amount: "₺5.000", name: "BİRİNCİLİK ÖDÜLÜ", top: true)
-            HStack(alignment: .top, spacing: 10) {
-                prize(rank: 2, amount: "₺1.500", name: "İKİNCİLİK", top: false)
-                prize(rank: 3, amount: "₺1.000", name: "ÜÇÜNCÜLÜK", top: false)
+        VStack(alignment: .leading, spacing: 11) {
+            AtlasHeading(kicker: "NAKİT ÖDÜLLER", title: "Şampiyonlar kürsüsü",
+                         detail: "İlk üç ada için açıklanan ödüller")
+            HStack(alignment: .bottom, spacing: 8) {
+                prize(rank: 2, amount: "₺1.500", name: "İKİNCİ", top: false)
+                    .frame(maxWidth: .infinity)
+                prize(rank: 1, amount: "₺5.000", name: "ŞAMPİYON", top: true)
+                    .frame(maxWidth: .infinity)
+                prize(rank: 3, amount: "₺1.000", name: "ÜÇÜNCÜ", top: false)
+                    .frame(maxWidth: .infinity)
             }
-            Text("Bu tutarlar açıklanan ödüllerdir; kazanan veya ödeme durumu anlamına gelmez.")
-                .font(.system(size: 11))
+            Text("Açıklanan ödüllerdir; kazanan veya ödeme durumu anlamına gelmez.")
+                .font(.system(size: 10))
                 .foregroundStyle(Atlas.muted)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -79,32 +97,33 @@ struct AtlasSeasonView: View {
 
     private func prize(rank: Int, amount: String, name: String, top: Bool) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image(systemName: rank == 1 ? "crown.fill" : "medal.fill")
-                    .font(.system(size: top ? 23 : 19))
-                    .foregroundStyle(top ? Atlas.orange : Atlas.copper)
-                Spacer(minLength: 0)
-                Text("#\(rank)")
-                    .font(.system(size: 11, weight: .black, design: .monospaced))
-                    .foregroundStyle(top ? Color.white.opacity(0.83) : Atlas.muted)
-            }
+            Image(systemName: rank == 1 ? "crown.fill" : "medal.fill")
+                .font(.system(size: top ? 22 : 17, weight: .bold))
+                .foregroundStyle(top ? Atlas.orange : Atlas.copper)
+            Text("#\(rank)")
+                .font(.system(size: 9, weight: .black, design: .monospaced))
+                .foregroundStyle(top ? Color.white.opacity(0.68) : Atlas.muted)
             Text(amount)
-                .font(.system(size: top ? 35 : 25, weight: .black, design: .rounded))
+                .font(.system(size: top ? 19 : 15, weight: .black, design: .rounded))
                 .foregroundStyle(top ? Color.white : Atlas.ink)
                 .lineLimit(1)
-                .minimumScaleFactor(0.7)
+                .minimumScaleFactor(0.6)
+            Spacer(minLength: 0)
             Text(name)
-                .font(.system(size: 10, weight: .heavy))
-                .tracking(0.5)
+                .font(.system(size: 8, weight: .black, design: .monospaced))
+                .tracking(0.25)
                 .foregroundStyle(top ? Atlas.orange : Atlas.copper)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
+        .padding(11)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(top ? 20 : 17)
-        .background(top ? Atlas.blue : Atlas.paper,
-                    in: RoundedRectangle(cornerRadius: 19))
-        .overlay(RoundedRectangle(cornerRadius: 19)
-            .strokeBorder(top ? Atlas.orange.opacity(0.38) : Atlas.line))
+        .frame(height: top ? 160 : rank == 2 ? 132 : 118)
+        .background(top ? Atlas.navy : Atlas.paper,
+                    in: RoundedRectangle(cornerRadius: 17))
+        .overlay(RoundedRectangle(cornerRadius: 17)
+            .strokeBorder(top ? Atlas.orange.opacity(0.4) : Atlas.line))
+        .shadow(color: Atlas.navy.opacity(top ? 0.1 : 0.02), radius: 10, x: 0, y: 4)
     }
 
     private var selection: some View {
@@ -159,35 +178,58 @@ struct AtlasSeasonView: View {
     }
 
     private func rankingRow(_ item: SeasonRanking) -> some View {
-        AtlasCard(inset: 15) {
-            HStack(alignment: .center, spacing: 12) {
-                Text("#\(item.rankPosition)")
-                    .font(.system(size: 19, weight: .black, design: .rounded))
-                    .foregroundStyle(item.rankPosition <= 3 ? Atlas.copper : Atlas.ink)
-                    .frame(width: 40)
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(item.ownerUsername)
-                        .font(.system(size: 15, weight: .bold))
+        HStack(spacing: 11) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(item.rankPosition == 1 ? Atlas.orange :
+                          item.rankPosition == 2 ? Atlas.blueLight :
+                          item.rankPosition == 3 ? Atlas.sand : Atlas.canvas)
+                if item.rankPosition <= 3 {
+                    Image(systemName: item.rankPosition == 1 ? "crown.fill" : "medal.fill")
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(Atlas.ink)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text(item.islandName)
-                        .font(.system(size: 11))
+                } else {
+                    Text("#\(item.rankPosition)")
+                        .font(.system(size: 12, weight: .black, design: .monospaced))
                         .foregroundStyle(Atlas.muted)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment: .trailing, spacing: 5) {
-                    Text(item.islandValue.formatted())
-                        .font(.system(size: 14, weight: .heavy, design: .rounded))
-                        .foregroundStyle(Atlas.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                    Text("ADA DEĞERİ")
-                        .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(Atlas.copper)
                 }
             }
+            .frame(width: 43, height: 46)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.ownerUsername)
+                    .font(.system(size: 13, weight: .black, design: .rounded))
+                    .foregroundStyle(Atlas.ink)
+                    .lineLimit(1)
+                Text(item.islandName)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(Atlas.muted)
+                    .lineLimit(1)
+                GeometryReader { geo in
+                    Capsule().fill(Atlas.line)
+                        .overlay(alignment: .leading) {
+                            Capsule().fill(item.rankPosition == 1 ? Atlas.orange : Atlas.blue)
+                                .frame(width: geo.size.width * min(1, max(0.08,
+                                    Double(item.islandValue) / Double(max(1, (session.season?.rankings ?? []).map(\.islandValue).max() ?? 1)))))
+                        }
+                }
+                .frame(height: 4)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(item.islandValue.formatted())
+                    .font(.system(size: 12, weight: .black, design: .rounded))
+                    .foregroundStyle(Atlas.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+                Text("ADA DEĞERİ")
+                    .font(.system(size: 7, weight: .black, design: .monospaced))
+                    .tracking(0.3)
+                    .foregroundStyle(Atlas.copper)
+            }
         }
+        .padding(12)
+        .background(Atlas.paper, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Atlas.line))
     }
 
     private var timeline: some View {

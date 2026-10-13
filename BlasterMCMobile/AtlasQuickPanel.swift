@@ -23,7 +23,7 @@ struct AtlasQuickPanel: View {
     var body: some View {
         NavigationStack {
             AtlasScreen {
-                AtlasBanner(eyebrow: "BLASTERMC / HIZLI ERİŞİM") {
+                AtlasBanner(eyebrow: "BLASTERMC / KOMUT MERKEZİ") {
                     Text("Her şey\nelinin altında.")
                         .font(.system(size: 30, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
@@ -120,7 +120,7 @@ struct AtlasQuickPanel: View {
                     .foregroundStyle(Atlas.muted)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .navigationTitle("Hızlı erişim")
+            .navigationTitle("Komut merkezi")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

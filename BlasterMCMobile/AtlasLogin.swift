@@ -5,28 +5,41 @@ struct AtlasSplash: View {
 
     var body: some View {
         ZStack {
-            Atlas.blue.ignoresSafeArea()
-            VStack(spacing: 17) {
-                AtlasPixelSignature()
-                    .scaleEffect(1.7)
-                    .padding(.bottom, 12)
-                BlasterLogo(size: 104)
-                    .opacity(ready ? 1 : 0.55)
-                    .scaleEffect(ready ? 1 : 0.94)
+            LinearGradient(colors: [Atlas.navy, Atlas.deepBlue, Atlas.blue],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+                .ignoresSafeArea()
+            RealmPortalArt()
+                .frame(width: 280, height: 320)
+                .opacity(0.6)
+                .offset(y: -45)
+                .accessibilityHidden(true)
+            VStack(spacing: 13) {
+                BlasterLogo(size: 93)
+                    .opacity(ready ? 1 : 0.65)
+                    .scaleEffect(ready ? 1 : 0.9)
+                    .shadow(color: Atlas.aqua.opacity(0.24), radius: 18)
                 Text("BLASTERMC")
                     .font(.system(size: 29, weight: .black, design: .rounded))
-                    .tracking(2.1)
+                    .tracking(2.0)
                     .foregroundStyle(.white)
-                Text("MOBILE  /  AURORA 12")
-                    .font(.system(size: 10, weight: .heavy, design: .monospaced))
-                    .tracking(2)
+                Text("YOUR WORLD. YOUR LEGACY.")
+                    .font(.system(size: 9, weight: .black, design: .monospaced))
+                    .tracking(1.2)
                     .foregroundStyle(Atlas.orange)
-                Capsule().fill(Atlas.orange).frame(width: 68, height: 3)
+                HStack(spacing: 4) {
+                    ForEach(0..<5, id: \.self) { index in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(index == 0 ? Atlas.orange : .white.opacity(0.35))
+                            .frame(width: index == 0 ? 24 : 6, height: 4)
+                    }
+                }
+                .padding(.top, 7)
             }
             .padding(30)
+            .offset(y: 80)
         }
         .onAppear {
-            withAnimation(.easeOut(duration: 0.5)) { ready = true }
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.72)) { ready = true }
         }
     }
 }
@@ -42,32 +55,28 @@ struct AtlasLoginView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 20) {
-                AtlasMasthead(label: "Güvenli giriş / AURORA")
-                AtlasBanner(eyebrow: "BLASTERMC  /  PLAYER ACCESS") {
-                    Text("Yeni bir dünya.\nTek bir hesap.")
-                        .font(.system(size: 30, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text("SkyBlock, sezon, mağaza ve topluluğun tek bir girişte.")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.89))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            VStack(alignment: .leading, spacing: 18) {
+                loginCover
                 form
                 HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: "checkmark.shield.fill")
-                        .foregroundStyle(Atlas.copper)
-                    Text("Giriş bilgilerin doğrudan BlasterMC API'sinde doğrulanır. Şifren cihazda saklanmaz; oturum anahtarı Keychain ile korunur.")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Atlas.muted)
-                        .fixedSize(horizontal: false, vertical: true)
+                    Image(systemName: "lock.shield.fill")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Atlas.mint)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Hesabın güvende")
+                            .font(.system(size: 12, weight: .black, design: .rounded))
+                            .foregroundStyle(Atlas.ink)
+                        Text("Giriş bilgilerin BlasterMC API'sinde doğrulanır. Şifren cihazda tutulmaz; oturum anahtarı iOS Keychain'de korunur.")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Atlas.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
-                .padding(.horizontal, 5)
+                .padding(.horizontal, 4)
+                .padding(.bottom, 18)
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 22)
-            .padding(.bottom, 32)
+            .padding(.horizontal, 17)
+            .padding(.top, 24)
             .frame(maxWidth: 560)
             .frame(maxWidth: .infinity)
         }
@@ -75,16 +84,60 @@ struct AtlasLoginView: View {
         .scrollDismissesKeyboard(.interactively)
     }
 
+    private var loginCover: some View {
+        ZStack(alignment: .topTrailing) {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(LinearGradient(colors: [Atlas.navy, Atlas.deepBlue],
+                                     startPoint: .topLeading, endPoint: .bottomTrailing))
+            RealmPortalArt()
+                .frame(width: 118, height: 135)
+                .opacity(0.45)
+                .padding(.trailing, 3)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 13) {
+                HStack(spacing: 9) {
+                    BlasterLogo(size: 42)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("BLASTERMC")
+                            .font(.system(size: 16, weight: .black, design: .rounded))
+                            .tracking(0.3)
+                            .foregroundStyle(.white)
+                        Text("MOBILE / REALM 13")
+                            .font(.system(size: 8, weight: .black, design: .monospaced))
+                            .tracking(0.8)
+                            .foregroundStyle(Atlas.orange)
+                    }
+                }
+                Text(session.mfaChallenge == nil ? "Dünyana\ngiriş yap." : "Hesabını\ndoğrula.")
+                    .font(.system(size: 28, weight: .black, design: .rounded))
+                    .tracking(-0.7)
+                    .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(session.mfaChallenge == nil ?
+                     "SkyBlock, sezonun ve topluluğun seni bekliyor." :
+                     "Authenticator veya kurtarma kodunu kullan.")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(18)
+            .padding(.trailing, 95)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+    }
+
     private var form: some View {
-        AtlasCard(inset: 19, spacing: 17) {
-            AtlasHeading(kicker: session.mfaChallenge == nil ? "BLASTER ID" : "İKİ AŞAMALI KORUMA",
-                         title: session.mfaChallenge == nil ? "Hesabına giriş yap" : "Doğrulama kodu",
+        VStack(alignment: .leading, spacing: 16) {
+            AtlasHeading(kicker: session.mfaChallenge == nil ? "BLASTER ID" : "İKİ AŞAMALI DOĞRULAMA",
+                         title: session.mfaChallenge == nil ? "Tekrar hoş geldin" : "Güvenlik kontrolü",
                          detail: session.mfaChallenge == nil ?
-                         "Kullanıcı adın ve şifrenle devam et." :
-                         "Authenticator veya kurtarma kodunu gir.")
+                         "Oyuncu hesabınla güvenli biçimde devam et." :
+                         "Devam etmek için doğrulama kodunu gir.")
             if session.mfaChallenge == nil {
-                input("MINECRAFT KULLANICI ADI", symbol: "person.crop.circle") {
-                    TextField("Oyuncu adın", text: $username)
+                input("KULLANICI ADI", symbol: "person.crop.circle") {
+                    TextField("Minecraft kullanıcı adın", text: $username)
                         .textContentType(.username)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
@@ -92,14 +145,11 @@ struct AtlasLoginView: View {
                         .submitLabel(.next)
                         .onSubmit { focus = .password }
                 }
-                input("ŞİFRE", symbol: "lock") {
+                input("ŞİFRE", symbol: "lock.fill") {
                     HStack(spacing: 8) {
                         Group {
-                            if reveal {
-                                TextField("Şifren", text: $password)
-                            } else {
-                                SecureField("Şifren", text: $password)
-                            }
+                            if reveal { TextField("Şifren", text: $password) }
+                            else { SecureField("Şifren", text: $password) }
                         }
                         .textContentType(.password)
                         .focused($focus, equals: .password)
@@ -107,14 +157,15 @@ struct AtlasLoginView: View {
                         .onSubmit { Task { await signIn() } }
                         Button { reveal.toggle() } label: {
                             Image(systemName: reveal ? "eye.slash" : "eye")
-                                .foregroundStyle(Atlas.copper)
+                                .foregroundStyle(Atlas.blue)
                         }
                         .accessibilityLabel(reveal ? "Şifreyi gizle" : "Şifreyi göster")
                     }
                 }
             } else {
-                input("DOĞRULAMA KODU", symbol: "checkmark.shield") {
-                    TextField("Kod", text: $code)
+                input("DOĞRULAMA KODU", symbol: "checkmark.shield.fill") {
+                    TextField("Authenticator kodu", text: $code)
+                        .textContentType(.oneTimeCode)
                         .textInputAutocapitalization(.characters)
                         .autocorrectionDisabled()
                         .focused($focus, equals: .code)
@@ -123,35 +174,56 @@ struct AtlasLoginView: View {
                 }
             }
             if let error = session.error {
-                Label(error, systemImage: "exclamationmark.triangle")
-                    .font(.system(size: 12))
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Atlas.danger)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            AtlasAction(title: session.isBusy ? "Doğrulanıyor…" :
-                        session.mfaChallenge == nil ? "Güvenli giriş yap" : "Kodu doğrula",
-                        symbol: "arrow.right") {
+            Button {
                 focus = nil
                 Task {
                     if session.mfaChallenge == nil { await signIn() }
                     else { await verify() }
                 }
+            } label: {
+                HStack {
+                    Text(session.isBusy ? "DOĞRULANIYOR…" :
+                         session.mfaChallenge == nil ? "GÜVENLİ GİRİŞ YAP" : "KODU DOĞRULA")
+                        .font(.system(size: 11, weight: .black, design: .rounded))
+                        .tracking(0.5)
+                    Spacer()
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 13, weight: .black))
+                        .frame(width: 30, height: 30)
+                        .background(.white.opacity(0.14), in: RoundedRectangle(cornerRadius: 9))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 15)
+                .frame(height: 51)
+                .background(Atlas.blue, in: RoundedRectangle(cornerRadius: 15))
             }
+            .buttonStyle(.plain)
             .disabled(session.isBusy)
         }
+        .padding(18)
+        .background(Atlas.paper, in: RoundedRectangle(cornerRadius: 21))
+        .overlay(RoundedRectangle(cornerRadius: 21).strokeBorder(Atlas.line))
+        .shadow(color: Atlas.navy.opacity(0.045), radius: 13, x: 0, y: 4)
     }
 
     private func input<Content: View>(_ label: String, symbol: String,
                                       @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 7) {
             Label(label, systemImage: symbol)
-                .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                .font(.system(size: 8, weight: .black, design: .monospaced))
+                .tracking(0.6)
                 .foregroundStyle(Atlas.copper)
             content()
-                .font(.system(size: 14))
+                .font(.system(size: 13))
                 .foregroundStyle(Atlas.ink)
                 .tint(Atlas.blue)
-                .padding(14)
+                .padding(.horizontal, 13)
+                .frame(minHeight: 46)
                 .background(Atlas.canvas, in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Atlas.line))
         }

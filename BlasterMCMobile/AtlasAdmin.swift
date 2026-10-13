@@ -31,8 +31,8 @@ struct AtlasAdminView: View {
 
     private var authorized: some View {
         AtlasScreen {
-            AtlasBanner(eyebrow: "BLASTER CONTROL / YÖNETİCİ") {
-                Text("Kontrol\nmerkezi.")
+            AtlasBanner(eyebrow: "BLASTER CONTROL / REALM") {
+                Text("Kontrol\nodası.")
                     .font(.system(size: 29, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                     .fixedSize(horizontal: false, vertical: true)
