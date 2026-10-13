@@ -257,6 +257,7 @@ struct AtlasBanner<Content: View>: View {
                 content
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.trailing, 58)
             .padding(19)
         }
         .fixedSize(horizontal: false, vertical: true)
