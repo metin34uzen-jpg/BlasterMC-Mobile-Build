@@ -11,7 +11,7 @@ on:
       - '.github/workflows/ios-build.yml'
 
 concurrency:
-  group: ios-manual-build
+  group: ios-realm-v13-builds
   cancel-in-progress: true
 
 jobs:
